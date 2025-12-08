@@ -19,6 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('loginform',[AuthController::class,'loginform']);
-
-
 Route::post('login',[AuthController::class,'login'])->name('login');
