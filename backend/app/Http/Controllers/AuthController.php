@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,8 +41,9 @@ class AuthController extends Controller
 
     public function loginform()
     {
-        return view('loginform');
+        return view('auth.loginform');
     }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -50,41 +53,28 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation errors',
-                'errors' => $validator->errors()
-            ], 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Invalid credentials'
-            ], 401);
+            return redirect()->back()->withErrors(['login_error' => 'Invalid credentials']);
         }
 
-        // // Create Sanctum token
+        // Create Sanctum token
         $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
 
-        // dd($user);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Login successful',
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ], 200);
+        return redirect()->route('tasks.index')->with('success', 'Logged in successfully');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return response()->json([
-            "message" => "Logged out successfully",
-        ], 200);
+        return redirect('/login')->with('success', 'Logged out successfully');
     }
 }

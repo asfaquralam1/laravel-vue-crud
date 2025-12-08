@@ -40,6 +40,8 @@ class TaskController extends Controller
         }
 
         $task = $this->taskService->create($validator->validated());
+
+        return redirect()->back()->with('success', 'Task created successfully');
     }
 
     public function show($id)
@@ -58,7 +60,20 @@ class TaskController extends Controller
         ]);
     }
 
-    public function update(Request $request,$id)
+    public function edit($id)
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            abort(404, 'Task not found');
+        }
+
+        return view('tasks.edit', [
+            'task' => $task,
+        ]);
+    }
+
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -84,7 +99,7 @@ class TaskController extends Controller
 
         $task = $this->taskService->update($task, $validator->validated());
 
-       return 
+        return redirect()->back()->with('success', 'Task updated successfully');
     }
 
     public function destroy($id)
@@ -100,9 +115,6 @@ class TaskController extends Controller
 
         $this->taskService->delete($task);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Task deleted successfully',
-        ]);
+        return redirect()->back()->with('success', 'Task deleted successfully');
     }
 }
