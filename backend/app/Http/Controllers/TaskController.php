@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +49,24 @@ class TaskController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function show($id)
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Task not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'task' => $task,
+        ]);
+    }
+
+    public function update(Request $request, Task $task)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -63,18 +81,26 @@ class TaskController extends Controller
             ], 422);
         }
 
-        $task = $this->taskService->update($id, $validator->validated());
+        $task = $this->taskService->update($task, $validator->validated());
 
         return response()->json([
             'status' => true,
             'message' => 'Task updated successfully',
-            'task' => $task,
         ]);
     }
-    
+
     public function destroy($id)
     {
-        $this->taskService->delete($id);
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Task not found.'
+            ], 404);
+        }
+
+        $this->taskService->delete($task);
 
         return response()->json([
             'status' => true,
