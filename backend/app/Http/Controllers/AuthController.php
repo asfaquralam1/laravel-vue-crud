@@ -66,7 +66,7 @@ class AuthController extends Controller
         $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
 
 
-        return redirect()->route('tasks.index')->with('success', 'Logged in successfully');
+        return redirect()->route('tasks.index')->with('token', $token);
     }
 
     public function logout(Request $request)
