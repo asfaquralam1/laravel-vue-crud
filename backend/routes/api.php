@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TaskController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\AuthAPIController;
+use App\Http\Controllers\API\TaskAPIController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,13 +20,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::post('register',[AuthController::class,'register']);
-Route::post('login',[AuthController::class,'login']);
-Route::post('logout',[AuthController::class,'logout'])
+Route::post('register',[AuthAPIController::class,'register']);
+Route::post('login',[AuthAPIController::class,'login']);
+Route::post('logout',[AuthAPIController::class,'logout'])
   ->middleware('auth:sanctum');
 
-Route::get('tasks',[TaskController::class,'index']);
-Route::post('tasks',[TaskController::class,'store']);
-Route::get('tasks/{id}',[TaskController::class,'show']);
-Route::post('tasks/{id}',[TaskController::class,'update']);
-Route::delete('tasks/{id}',[TaskController::class,'destroy']);
+Route::get('tasks',[TaskAPIController::class,'index']);
+Route::post('tasks',[TaskAPIController::class,'store']);
+Route::get('tasks/{id}',[TaskAPIController::class,'show']);
+Route::post('tasks/{id}',[TaskAPIController::class,'update']);
+Route::delete('tasks/{id}',[TaskAPIController::class,'destroy']);
