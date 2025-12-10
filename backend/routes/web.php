@@ -23,7 +23,8 @@ Route::get('/',[AuthController::class,'loginform']);
 Route::post('login',[AuthController::class,'login'])->name('login');
 
 Route::group(['prefix'=>'tasks','middleware'=>'auth'],function(){
-    Route::get('tasks',[TaskController::class,'index'])->name('tasks.index');
+    Route::get('/',[TaskController::class,'index'])->name('tasks.index');
+    Route::get('create',[TaskController::class,'create'])->name('tasks.create');
     Route::post('store',[TaskController::class,'store'])->name('tasks.store');
     Route::get('{id}',[TaskController::class,'show'])->name('tasks.show');
     Route::get('{id}/edit',[TaskController::class,'edit'])->name('tasks.edit');

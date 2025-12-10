@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +50,6 @@ class AuthController extends Controller
             'password' => 'required|min:4'
         ]);
 
-
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -62,11 +60,9 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['login_error' => 'Invalid credentials']);
         }
 
-        // Create Sanctum token
-        $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
+        Auth::login($user);
 
-
-        return redirect()->route('tasks.index')->with('token', $token);
+        return redirect()->route('tasks.index')->with('user', $user);
     }
 
     public function logout(Request $request)

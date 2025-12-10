@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
@@ -21,6 +22,11 @@ class TaskController extends Controller
         return view('tasks.index', [
             'tasks' => $this->taskService->getAll(),
         ]);
+    }
+
+    public function create()
+    {
+        return view('tasks.create');
     }
 
     public function store(Request $request)
@@ -99,7 +105,7 @@ class TaskController extends Controller
 
         $task = $this->taskService->update($task, $validator->validated());
 
-        return redirect()->back()->with('success', 'Task updated successfully');
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully');
     }
 
     public function destroy($id)
