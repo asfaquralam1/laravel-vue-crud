@@ -8,7 +8,7 @@
                         {{ session('success') }}
                     </div>
                 @endif
-               <a href="{{ route('tasks.create') }}">Create Task</a>
+               <a class="btn btn-primary mb-3" href="{{ route('tasks.create') }}">Create Task</a>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Task List</h4>

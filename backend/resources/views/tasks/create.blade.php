@@ -21,7 +21,7 @@
                             <div class="form group mt-3">
                                 <textarea name="description" class="form-control" rows="4"></textarea>
                             </div>
-                            <button type="submit">Save</button>
+                            <button class="btn btn-success mt-3" type="submit">Save</button>
                         </form>
                     </div>
                 </div>
